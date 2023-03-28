@@ -1,5 +1,6 @@
-{% load static %}   {# load static file: apply css #}
-<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+{% extends 'base.html'%}
+{% block content %}
+
 <div class="container my-3">
     <!-- 질문 -->
     <h2 class="border-bottom py-2">{{ question.subject }}</h2>
@@ -37,3 +38,4 @@
         <input type="submit" value="답변등록" class="btn btn-primary">
     </form>
 </div>
+{% endblock %}

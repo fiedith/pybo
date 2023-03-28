@@ -1,5 +1,5 @@
-{% load static %}   {# load static file: apply css #}
-<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+{%  extends 'base.html' %}
+{% block content %}
 
 <div class="container my-3">
     <table class="table">
@@ -29,3 +29,4 @@
         </tbody>
     </table>
 </div>
+{% endblock %}
