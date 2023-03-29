@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Question, Answer
+from .forms import QuestionForm
 
 # Create your views here.
 
@@ -22,5 +23,17 @@ def answer_create(request, question_id):
     answer = Answer(question=question, content=request.POST.get('content'), create_date = timezone.now())
     answer.save()
     # request.POST.get('content') 은 POST로 전송된 form 데이터 항목 중 content 값을 의미함
-
     return redirect('pybo:detail', question_id=question.id)
+
+def question_create(request):
+    if request.method == 'POST':    # "저장하기" 버튼 -> POST요청으로 작성된 질문을 저장함
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)  # commit=False -> db에 아직 저장은 안함. 임시 저장만 함.
+            question.create_date = timezone.now()   # date 생성
+            question.save()                     # 실제로 저장
+            return redirect('pybo:index')
+    else:   # else이므로 GET: "질문 등록하기" 버튼 -> 질문을 등록하기 위한 페이지를 띄워야 하므로
+        form = QuestionForm()
+    context = {'form': form}
+    return render(request, 'pybo/question_form.html', context)

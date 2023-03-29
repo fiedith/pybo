@@ -9,5 +9,7 @@ urlpatterns = [
     path('', views.index, name='index'),  # localhost:8000/pybo/
     path('<int:question_id>/', views.detail, name='detail'),    # localhost:8000/pybo/2 페이지 요청시 question_id = 2 가 저장되고 views.detail 호출
     path('answer/create/<int:question_id>/', views.answer_create, name='answer_create'),    # localhost:8000/pybo/answer/create/2 와 같은 페이지 요청시 views.answer_create 호출
+    path('question/create/', views.question_create, name='question_create'),
 ]
+
 
