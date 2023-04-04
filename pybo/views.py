@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from django.http import HttpResponseNotAllowed
 from .models import Question, Answer
 from .forms import QuestionForm, AnswerForm
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -23,6 +23,7 @@ def detail(request, question_id):
     # urls.py 에서 명시됐듯 localhost:8000/pybo/2 와 같이 요청되면
     # 매개변수 question_id에 2가 세팅되어 detail 함수가 실행되는 것임.
 
+@login_required(login_url='common:login')       # login required when creating answers
 def answer_create(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     if request.method == "POST":
@@ -35,10 +36,11 @@ def answer_create(request, question_id):
             answer.save()
             return redirect('pybo:detail', question_id=question.id)
     else:
-        return HttpResponseNotAllowed('Only POST is possible.')
+        form = AnswerForm()
     context = {'question': question, 'form': form}
     return render(request, 'pybo/question_detail.html', context)
 
+@login_required(login_url='common:login')       # login required when creating questions
 def question_create(request):
     if request.method == 'POST':    # "저장하기" 버튼 -> POST요청으로 작성된 질문을 저장함
         form = QuestionForm(request.POST)
