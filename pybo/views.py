@@ -29,6 +29,7 @@ def answer_create(request, question_id):
         form = AnswerForm(request.POST)
         if form.is_valid():
             answer = form.save(commit=False)
+            answer.author = request.user  # author 속성에 현재 로그인된 계정 저장
             answer.create_date = timezone.now()
             answer.question = question
             answer.save()
@@ -43,6 +44,7 @@ def question_create(request):
         form = QuestionForm(request.POST)
         if form.is_valid():
             question = form.save(commit=False)  # commit=False -> db에 아직 저장은 안함. 임시 저장만 함.
+            question.author = request.user      # author 속성에 현재 로그인된 계정 저장
             question.create_date = timezone.now()   # date 생성
             question.save()                     # 실제로 저장
             return redirect('pybo:index')
