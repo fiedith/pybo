@@ -56,10 +56,11 @@ def question_create(request):
     context = {'form': form}
     return render(request, 'pybo/question_form.html', context)
 
-@login_required(login_url='common:login')
+
+@login_required(login_url='common:login')  # 질문 수정
 def question_modify(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    if request.user != question.author:         # 현재 login된 사용자와 질문의 글쓴이가 다를때
+    if request.user != question.author:         # 현재 login된 사용자와 질문의 글쓴이가 다를 경우
         messages.error(request, '수정권한이 없습니다')
         return redirect('pybo:detail', question_id=question.id)
     if request.method == "POST":
@@ -74,3 +75,12 @@ def question_modify(request, question_id):
         form = QuestionForm(instance=question)  # GET
     context = {'form': form}
     return render(request, 'pybo/question_form.html', context)
+
+@login_required(login_url='common:login')   # 질문 삭제
+def question_delete(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    if request.user != question.author:     # 현재 login된 사용자와 질문의 글쓴이가 다를 경우
+        messages.error(request, '삭제권한이 없습니다')
+        return redirect('pybo:detail', question_id=question.id)
+    question.delete()
+    return redirect('pybo:index')
