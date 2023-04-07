@@ -29,6 +29,11 @@
                 </div>
             </div>
             <div class="my-3">
+                {# question vote #}
+                <a href="javascript:void(0)" data-uri="{% url 'pybo:question_vote' question.id  %}"
+               class="recommend btn btn-sm btn-outline-secondary"> 추천
+                    <span class="badge rounded-pill bg-success">{{question.voter.count}}</span>
+                </a>
             {% if request.user == question.author %}
                 <a href="{% url 'pybo:question_modify' question.id  %}"
                class="btn btn-sm btn-outline-secondary">수정</a>
@@ -55,8 +60,14 @@
                     {{ answer.create_date }}
                 </div>
             </div>
-            {# answer modify #}
+
             <div class="my-3">
+                {# answer vote #}
+                <a href="javascript:void(0)" data-uri="{% url 'pybo:answer_vote' answer.id  %}"
+               class="recommend btn btn-sm btn-outline-secondary"> 추천
+                    <span class="badge rounded-pill bg-success">{{answer.voter.count}}</span>
+                </a>
+                {# answer modify #}
                 {% if request.user == answer.author %}
                     <a href="{% url 'pybo:answer_modify' answer.id  %}"
                        class="btn btn-sm btn-outline-secondary">수정</a>
@@ -96,14 +107,23 @@
     </form>
 </div>
 {% endblock %}
-
-{# 질문 삭제 start #}
 {% block script %}
+{# 정말로 삭제하겠습니까? 창 #}
 <script type='text/javascript'>
 const delete_elements = document.getElementsByClassName("delete");
 Array.from(delete_elements).forEach(function(element) {
     element.addEventListener('click', function() {
         if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = this.dataset.uri;
+        };
+    });
+});
+
+{# 정말로 추천하겠습니까? 창 #}
+const recommend_elements = document.getElementsByClassName("recommend");
+Array.from(recommend_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        if(confirm("정말로 추천하시겠습니까?")) {
             location.href = this.dataset.uri;
         };
     });

@@ -50,3 +50,12 @@ def question_delete(request, question_id):
         return redirect('pybo:detail', question_id=question.id)
     question.delete()
     return redirect('pybo:index')
+
+@login_required(login_url='common:login')   # 질문 추천
+def question_vote(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    if request.user == question.author:     # 현재 login된 사용자가 글쓴이와 같다면 추천금지
+        messages.error(request, '본인이 작성한 글은 추천할수 없습니다')
+    else:
+        question.voter.add(request.user)
+    return redirect('pybo:detail', question_id=question.id)
