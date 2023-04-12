@@ -4,9 +4,13 @@ from django.shortcuts import render, get_object_or_404
 
 from ..models import Question
 
+import logging
+# 로그 파일에 로그 출력하기 위한 logging 객체
+logger = logging.getLogger('pybo')
+
 def index(request):
-    3/0     # logtest
-    
+    logger.info("INFO 레벨로 출력")
+
     page = request.GET.get('page', '1')  # 페이지. # GET방식으로 호출된 url에서 page값을 가져올 때 사용됨
     kw = request.GET.get('kw','')   # 검색어
     question_list = Question.objects.order_by('-create_date')
